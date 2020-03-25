@@ -5,12 +5,13 @@ from rest_framework.authtoken.models import Token
 from django.conf import settings
 
 class Item(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)
-    name = models.CharField(db_column='Name', max_length=128, blank=True, null=True)
-    category = models.CharField(db_column='Category', max_length=128, blank=True, null=True)
+    id          = models.AutoField(db_column='ID', primary_key=True)
+    imageUrl    = models.ImageField(db_column="imageUrl", max_length=256, upload_to='images/')
+    name        = models.CharField(db_column='Name', max_length=128, null=True)
+    category    = models.CharField(db_column='Category', max_length=128, null=True)
     description = models.CharField(db_column='Description', max_length=256,  blank=True, null=True)
-    number = models.IntegerField(db_column='Number', blank=True, null=True)
-    price = models.IntegerField(db_column='Price', blank=True, null=True)
+    number      = models.IntegerField(db_column='Number', null=True)
+    price       = models.IntegerField(db_column='Price', null=True)
 
     class Meta:
         managed = False
