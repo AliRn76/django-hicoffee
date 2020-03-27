@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view, permission_classes
 
 from app.models import Item
 
-from app.api.serializers import ItemSerializers
+from app.api.serializers import ItemSerializers, CreateItemSerializers
 
 
 
@@ -34,7 +34,7 @@ def show_all_items_view(request):
 @permission_classes((AllowAny, ))
 def add_item_view(request):
     print(request.data)
-    serializer = ItemSerializers(data=request.data)
+    serializer = CreateItemSerializers(data=request.data)
     if serializer.is_valid():
         # serializer.save()
         item = Item.objects.create(

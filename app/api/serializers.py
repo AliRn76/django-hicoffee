@@ -5,3 +5,10 @@ class ItemSerializers(serializers.ModelSerializer):
     class Meta:
         model   = Item
         fields  = ['image_url', 'name', 'category', 'description', 'number', 'price']
+
+
+class CreateItemSerializers(serializers.ModelSerializer):
+    class Meta:
+        model   = Item
+        fields  = ['name', 'category', 'description', 'number', 'price']
+
