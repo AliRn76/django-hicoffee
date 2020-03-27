@@ -5,6 +5,9 @@ __pycache__/
 db.sqlite3
 media/
 
+migrations/
+
+HiCoffee.txt
 log.txt
 
 *.so

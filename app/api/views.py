@@ -28,3 +28,25 @@ def show_all_items_view(request):
     else:
         data = {"response": "there is no item"}
         return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST', ])
+@permission_classes((AllowAny, ))
+def add_item_view(request):
+    print(request.data)
+    serializer = ItemSerializers(data=request.data)
+    if serializer.is_valid():
+        # serializer.save()
+        item = Item.objects.create(
+            name        = serializer.data.get("name"),
+            category    = serializer.data.get("category"),
+            number      = serializer.data.get("number"),
+            price       = serializer.data.get("price"),
+            description = serializer.data.get("description"),
+        )
+        item.save()
+
+
+        return Response(data={"ok": "ok"}, status=status.HTTP_200_OK)
+    else:
+        return Response(data=serializer.errors, status=status.HTTP_200_OK)
