@@ -47,6 +47,6 @@ def add_item_view(request):
         item.save()
 
 
-        return Response(data={"ok": "ok"}, status=status.HTTP_200_OK)
+        return Response(data={"response": "ok"}, status=status.HTTP_200_OK)
     else:
         return Response(data=serializer.errors, status=status.HTTP_200_OK)
