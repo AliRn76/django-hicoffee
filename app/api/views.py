@@ -48,4 +48,4 @@ def add_item_view(request):
 
         return Response(data={"response": "ok"}, status=status.HTTP_200_OK)
     else:
-        return Response(data=serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
+        return Response(data=serializer.errors)

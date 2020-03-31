@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': 'HiCoffee',
         'USER': 'Ali',
         'PASSWORD': 'alivampire2252',
-    }
+    },
 }
 
 
