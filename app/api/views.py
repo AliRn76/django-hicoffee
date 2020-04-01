@@ -74,3 +74,22 @@ def edit_item_view(request):
     else:
         return Response(data=serializer.errors)
 
+
+
+@api_view(['DELETE', ])
+@permission_classes((AllowAny, ))
+def delete_item_view(request, item_name):
+    try:
+        item = Item.objects.get(name=item_name)
+
+    except Item.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    result = item.delete()
+
+    if result:
+        return Response(data={"response": "ok"}, status=status.HTTP_200_OK)
+    else:
+        return Response(status=status.HTTP_409_CONFLICT)
+
+
