@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view, permission_classes
 
 from app.models import Item
 
-from app.api.serializers import ItemSerializers, CreateItemSerializers
+from app.api.serializers import ItemSerializers, CreateItemSerializers, EditItemSerializers
 
 
 
@@ -49,3 +49,28 @@ def add_item_view(request):
         return Response(data={"response": "ok"}, status=status.HTTP_200_OK)
     else:
         return Response(data=serializer.errors)
+
+
+
+@api_view(['PUT', ])
+@permission_classes((AllowAny, ))
+def edit_item_view(request):
+    serializer = CreateItemSerializers(data=request.data)
+    if serializer.is_valid():
+        # print(serializer.data.get("number"))
+
+        name = serializer.data.get("name")
+        number = serializer.data.get("number")
+        price = serializer.data.get("price")
+        description = serializer.data.get("description")
+
+        item = Item.objects.filter(name=request.data.get("last_name")).update(name=name, number=number, price=price, description=description)
+
+        if item:
+            return Response(data={"response": "ok"}, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    else:
+        return Response(data=serializer.errors)
+

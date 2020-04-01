@@ -12,3 +12,9 @@ class CreateItemSerializers(serializers.ModelSerializer):
         model   = Item
         fields  = ['name', 'category', 'description', 'number', 'price']
 
+class EditItemSerializers(serializers.ModelSerializer):
+    class Meta:
+        model   = Item
+        fields  = ['name', 'description', 'number', 'price']
+
+
