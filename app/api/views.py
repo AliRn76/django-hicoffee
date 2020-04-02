@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view, permission_classes
 
 from app.models import Item
 
-from app.api.serializers import ItemSerializers, CreateItemSerializers, EditItemSerializers
+from app.api.serializers import ItemSerializers, CreateItemSerializers, EditItemSerializers, SellItemSerializers
 
 
 
@@ -76,7 +76,7 @@ def add_item_view(request):
 @api_view(['PUT', ])
 @permission_classes((AllowAny, ))
 def edit_item_view(request):
-    serializer = CreateItemSerializers(data=request.data)
+    serializer = EditItemSerializers(data=request.data)
     if serializer.is_valid():
         # print(serializer.data.get("number"))
 
@@ -114,3 +114,27 @@ def delete_item_view(request, item_name):
         return Response(status=status.HTTP_409_CONFLICT)
 
 
+@api_view(['POST', ])
+@permission_classes((AllowAny, ))
+def sell_item_view(request):
+    serializer = EditItemSerializers(data=request.data)
+
+    if serializer.is_valid():
+        name = serializer.data.get("name")
+        number = serializer.data.get("number")
+
+        try:
+            item = Item.objects.get(name=name)
+
+        except Item.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        item = Item.objects.filter(name=name).update(number=number)
+
+        if item:
+            return Response(data={"response": "ok"}, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    else:
+        return Response(data=serializer.errors)

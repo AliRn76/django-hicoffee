@@ -17,4 +17,10 @@ class EditItemSerializers(serializers.ModelSerializer):
         model   = Item
         fields  = ['name', 'description', 'number', 'price']
 
+class SellItemSerializers(serializers.ModelSerializer):
+    class Meta:
+        model   = Item
+        fields  = ['name', 'number']
+
+
 
