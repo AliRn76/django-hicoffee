@@ -34,28 +34,30 @@ def show_all_items_view(request):
 @api_view(['GET', ])
 @permission_classes((AllowAny, ))
 def show_item_view(request, item_name):
+    print("ITEM NAME: " + item_name)
     try:
         item = Item.objects.get(name=item_name)
         print("ITEM NAME: " + item_name)
 
     except Item.DoesNotExist:
+
         print("ITEM Does not exist")
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if item:
-        print("ITEM" + item)
-        serializer = ItemSerializers(item)
-        print(serializer.data)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
-    else:
-        print("ITEM NABOOD")
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    print("ITEM" + item)
+    serializer = ItemSerializers(item)
+    print(serializer.data)
+
+    return Response(data=serializer.data, status=status.HTTP_200_OK)
+    # else:
+    #     print("ITEM NABOOD")
+    #     return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 
 
 
-@api_view(['POST', ])
+@api_view(['DELETE', ])
 @permission_classes((AllowAny, ))
 def add_item_view(request):
     print(request.data)

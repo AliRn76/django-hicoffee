@@ -8,5 +8,5 @@ urlpatterns = [
     path('add-item/', add_item_view),
     path('edit-item/', edit_item_view),
     path('delete-item/<str:item_name>', delete_item_view),
-    path('show_item/<str:item_name>', show_item_view),
+    path('show-item/<str:item_name>', show_item_view),
 ]
