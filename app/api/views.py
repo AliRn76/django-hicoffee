@@ -134,7 +134,7 @@ def sell_item_view(request):
         new_number = item.number - number
         print("sell nubmer: " + str(number))
         print("new nubmer: " + str(new_number))
-        if new_number < 1:
+        if new_number < 0:
             return Response(data={"response": "error, you cant sell that much"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
         # Update Number Value
