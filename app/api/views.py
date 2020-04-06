@@ -119,9 +119,10 @@ def delete_item_view(request, item_name):
 def sell_item_view(request):
     serializer = EditItemSerializers(data=request.data)
 
+    # Check Value
     if serializer.is_valid():
         name = serializer.data.get("name")
-        new_number = serializer.data.get("number")
+        number = serializer.data.get("number")
 
         try:
             item = Item.objects.get(name=name)
@@ -129,9 +130,17 @@ def sell_item_view(request):
         except Item.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        number = item.number
-        item = Item.objects.filter(name=name).update(number=number - new_number)
+        # Check Is Number Positive
+        new_number = item.number - number
+        print("sell nubmer: " + str(number))
+        print("new nubmer: " + str(new_number))
+        if new_number < 1:
+            return Response(data={"response": "error, you cant sell that much"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
+        # Update Number Value
+        item = Item.objects.filter(name=name).update(number=new_number)
+
+        # Set Response
         if item:
             return Response(data={"response": "ok"}, status=status.HTTP_200_OK)
         else:
