@@ -57,7 +57,6 @@ def add_item_view(request):
     print(request.data)
     serializer = CreateItemSerializers(data=request.data)
     if serializer.is_valid():
-        # serializer.save()
         item = Item.objects.create(
             name        = serializer.data.get("name"),
             category    = serializer.data.get("category"),
@@ -114,6 +113,7 @@ def delete_item_view(request, item_name):
         return Response(status=status.HTTP_409_CONFLICT)
 
 
+
 @api_view(['POST', ])
 @permission_classes((AllowAny, ))
 def sell_item_view(request):
@@ -121,7 +121,7 @@ def sell_item_view(request):
 
     if serializer.is_valid():
         name = serializer.data.get("name")
-        number = serializer.data.get("number")
+        new_number = serializer.data.get("number")
 
         try:
             item = Item.objects.get(name=name)
@@ -129,7 +129,8 @@ def sell_item_view(request):
         except Item.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        item = Item.objects.filter(name=name).update(number=number)
+        number = item.number
+        item = Item.objects.filter(name=name).update(number=number - new_number)
 
         if item:
             return Response(data={"response": "ok"}, status=status.HTTP_200_OK)
