@@ -8,7 +8,7 @@ i = 1
 class Item(models.Model):
     id          = models.AutoField(db_column='ID', primary_key=True)
     image_url   = models.ImageField(db_column="Image_Url", upload_to='images/', max_length=256, default='/default.jpg')
-    name        = models.CharField(db_column='Name', max_length=128, default='محصول'+'i')
+    name        = models.CharField(db_column='Name', max_length=128, default=' محصول'+ i)
     category    = models.CharField(db_column='Category', max_length=128, default='غیره')
     description = models.CharField(db_column='Description', max_length=256,  blank=True, null=True)
     number      = models.IntegerField(db_column='Number', null=True, blank=True)
