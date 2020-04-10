@@ -1,11 +1,16 @@
 
-from django.contrib.auth.models import User
 
+import base64
 from rest_framework import status
+from django.contrib.auth.models import User
 from rest_framework.response import Response
+from django.core.files.base import ContentFile
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
+
+
+
 
 from app.models import Item
 
@@ -55,8 +60,11 @@ def show_item_view(request, item_name):
 @permission_classes((AllowAny, ))
 def add_item_view(request):
     print(request.data)
+
     serializer = CreateItemSerializers(data=request.data)
     if serializer.is_valid():
+
+
         item = Item.objects.create(
             name        = serializer.data.get("name"),
             category    = serializer.data.get("category"),
@@ -72,24 +80,90 @@ def add_item_view(request):
 
 
 
+
 @api_view(['PUT', ])
 @permission_classes((AllowAny, ))
 def edit_item_view(request):
-    serializer = EditItemSerializers(data=request.data)
-    if serializer.is_valid():
-        # print(serializer.data.get("number"))
+    data = {}
+    last_name = request.data.get("last_name")
 
+    # check is last_name Valid or Not
+    if last_name is None:
+        data = {'error': 'last_name Is Not Valid'}
+        return Response(data=data, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+    # serialize all request data
+    serializer = EditItemSerializers(data=request.data)
+
+    # collect serialized data
+    if serializer.is_valid():
         name = serializer.data.get("name")
         number = serializer.data.get("number")
         price = serializer.data.get("price")
         description = serializer.data.get("description")
+        image_url = serializer.data.get("image_url")
+        req_image_url = request.data.get("image_url")
 
-        item = Item.objects.filter(name=request.data.get("last_name")).update(name=name, number=number, price=price, description=description)
+        # get item with last_name
+        items = Item.objects.filter(name=last_name)
 
+        # update only one item if we have at least one
+        try:
+            item = items[0]
+        except:
+            item = None
+
+
+        # If We Have at least one item
         if item:
-            return Response(data={"response": "ok"}, status=status.HTTP_200_OK)
+            print("last item.name: ", item.name)
+            print("last item.number: ", item.number)
+            print("last item.price: ", item.price)
+            print("last item.description: ", item.description)
+            print("last item.image_url: ", item.image_url)
+
+            # If Value Was Not Null Update It
+            if name is not None:
+                item.name = name
+
+            if number is not None:
+                item.number = number
+
+            if price is not None:
+                item.price = price
+
+            if description is not None:
+                item.description = description
+
+            if req_image_url is not None:
+                item.image_url = req_image_url
+
+            # Update Response, Should be Null
+            response = item.save()
+            print("response: ", response)
+
+            data = {
+                "response": "update successfully",
+                'last_name': last_name,
+                'name': name,
+                'number': number,
+                'price': price,
+                'description': description,
+                'image_url': str(req_image_url),
+            }
+            return Response(data=data, status=status.HTTP_202_ACCEPTED)
+
         else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            data = {
+                "error": "item Not Found",
+                'last_name': last_name,
+                'name': name,
+                'number': number,
+                'price': price,
+                'description': description,
+                'image_url': str(req_image_url),
+            }
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
     else:
         return Response(data=serializer.errors)
@@ -149,3 +223,12 @@ def sell_item_view(request):
 
     else:
         return Response(data=serializer.errors)
+
+
+
+# baraye in function bayad model change beshe va jadvale sell be soorate joda goone tarif beshe
+# in ro ham bayad bezaram baraye ver 2.0
+@api_view(['GET', ])
+@permission_classes((AllowAny, ))
+def show_chart_view():
+    pass
