@@ -8,6 +8,7 @@ from app.api.views import (
     delete_item_view,
     show_item_view,
     sell_item_view,
+    test_view,
     )
 
 urlpatterns = [
@@ -17,4 +18,5 @@ urlpatterns = [
     path('delete-item/<str:item_name>', delete_item_view),
     path('show-item/<str:item_name>', show_item_view),
     path('sell-item/', sell_item_view),
+    path('test/', test_view),
 ]

@@ -14,7 +14,7 @@ from rest_framework.decorators import api_view, permission_classes
 
 from app.models import Item
 
-from app.api.serializers import ItemSerializers, CreateItemSerializers, EditItemSerializers, SellItemSerializers
+from app.api.serializers import ItemSerializers, CreateItemSerializers, EditItemSerializers, SellItemSerializers, TestSerializers
 
 
 
@@ -101,6 +101,7 @@ def edit_item_view(request):
         number = serializer.data.get("number")
         price = serializer.data.get("price")
         description = serializer.data.get("description")
+        # I don't know why image_url give us Null, I'm pretty sure everything is fine :\
         image_url = serializer.data.get("image_url")
         req_image_url = request.data.get("image_url")
 
@@ -170,6 +171,7 @@ def edit_item_view(request):
 
 
 
+
 @api_view(['DELETE', ])
 @permission_classes((AllowAny, ))
 def delete_item_view(request, item_name):
@@ -224,6 +226,19 @@ def sell_item_view(request):
     else:
         return Response(data=serializer.errors)
 
+
+
+# Test For Post Image
+@api_view(['POST', ])
+@permission_classes((AllowAny, ))
+def test_view(request):
+    print("request.data: ", request.data)
+    serializer = TestSerializers(data=request.data)
+    if serializer.is_valid():
+        # serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # baraye in function bayad model change beshe va jadvale sell be soorate joda goone tarif beshe

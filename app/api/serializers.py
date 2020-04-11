@@ -28,3 +28,12 @@ class SellItemSerializers(serializers.ModelSerializer):
 
 
 
+class TestSerializers(serializers.ModelSerializer):
+    class Meta:
+        model   = Item
+        fields  = ['image_url']
+
+
+
+
+
