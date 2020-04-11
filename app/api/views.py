@@ -63,19 +63,20 @@ def add_item_view(request):
 
     serializer = CreateItemSerializers(data=request.data)
     if serializer.is_valid():
+        serializer.save()
 
-
-        item = Item.objects.create(
-            name        = serializer.data.get("name"),
-            category    = serializer.data.get("category"),
-            number      = serializer.data.get("number"),
-            price       = serializer.data.get("price"),
-            description = serializer.data.get("description"),
-        )
-        item.save()
-
-        return Response(data={"response": "ok"}, status=status.HTTP_200_OK)
+        # item = Item.objects.create(
+        #     name        = serializer.data.get("name"),
+        #     category    = serializer.data.get("category"),
+        #     number      = serializer.data.get("number"),
+        #     price       = serializer.data.get("price"),
+        #     description = serializer.data.get("description"),
+        # )
+        # item.save()
+        print(serializer.data)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
     else:
+        print(serializer.errors)
         return Response(data=serializer.errors)
 
 
@@ -227,7 +228,7 @@ def sell_item_view(request):
         return Response(data=serializer.errors)
 
 
-
+'''
 # Test For Post Image
 @api_view(['POST', ])
 @permission_classes((AllowAny, ))
@@ -242,7 +243,7 @@ def test_view(request):
     else:
         print("ERROR", serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+'''
 
 # baraye in function bayad model change beshe va jadvale sell be soorate joda goone tarif beshe
 # in ro ham bayad bezaram baraye ver 2.0
