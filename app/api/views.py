@@ -235,13 +235,12 @@ def test_view(request):
     print("request.data: ", request.data)
     serializer = TestSerializers(data=request.data)
     if serializer.is_valid():
-        item = Item.objects.create(
-            name="test",
-            image_url=serializer.data.get("image_url"),
-        )
-        item.save()
+
+        serializer.save()
+        print("OK", serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
+        print("ERROR", serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
