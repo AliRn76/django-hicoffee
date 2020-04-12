@@ -87,7 +87,7 @@ def add_item_view(request):
 def edit_item_view(request):
     data = {}
     last_name = request.data.get("last_name")
-
+    print(request.data)
     # check is last_name Valid or Not
     if last_name is None:
         data = {'error': 'last_name Is Not Valid'}
@@ -98,12 +98,14 @@ def edit_item_view(request):
 
     # collect serialized data
     if serializer.is_valid():
+
+
         name = serializer.data.get("name")
         number = serializer.data.get("number")
         price = serializer.data.get("price")
         description = serializer.data.get("description")
         # I don't know why image_url give us Null, I'm pretty sure everything is fine :\
-        image_url = serializer.data.get("image_url")
+        # image_url = serializer.data.get("image_url")
         req_image_url = request.data.get("image_url")
 
         # get item with last_name
@@ -144,28 +146,11 @@ def edit_item_view(request):
             response = item.save()
             print("response: ", response)
 
-            data = {
-                "response": "update successfully",
-                'last_name': last_name,
-                'name': name,
-                'number': number,
-                'price': price,
-                'description': description,
-                'image_url': str(req_image_url),
-            }
-            return Response(data=data, status=status.HTTP_202_ACCEPTED)
+            return Response(data=serializer.data, status=status.HTTP_202_ACCEPTED)
 
         else:
-            data = {
-                "error": "item Not Found",
-                'last_name': last_name,
-                'name': name,
-                'number': number,
-                'price': price,
-                'description': description,
-                'image_url': str(req_image_url),
-            }
-            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+            print("item Not Found")
+            return Response(data=serializer.data, status=status.HTTP_404_NOT_FOUND)
 
     else:
         return Response(data=serializer.errors)
